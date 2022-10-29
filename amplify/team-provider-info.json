@@ -15,6 +15,9 @@
       "auth": {
         "amplifycommercedemoac357cb1ac357cb1": {},
         "userPoolGroups": {}
+      },
+      "api": {
+        "bookstoreapi": {}
       }
     }
   }

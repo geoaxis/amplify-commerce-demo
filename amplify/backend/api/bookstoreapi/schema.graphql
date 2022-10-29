@@ -5,8 +5,8 @@ input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONL
 type Book @model @auth (
   rules : [
     { allow : groups, groups: ["admin"]}
-    { allow : private, operations: ["read"]}
-    { allow : public, operations: ["read"], provider: iam}
+    { allow : private, operations: [read]}
+    { allow : public, operations: [read], provider: iam}
   ]
 ){
   id: ID!
