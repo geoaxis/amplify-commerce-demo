@@ -1,22 +1,55 @@
 import React, { useEffect, useState } from 'react'
-import { Amplify, API, graphqlOperation } from 'aws-amplify'
+import { Amplify, Auth, API, graphqlOperation } from 'aws-amplify'
 import { createBook, updateBook } from './graphql/mutations'
 import { listBooks } from './graphql/queries'
-import {  Authenticator } from '@aws-amplify/ui-react'
+import { Button, TextField } from '@aws-amplify/ui-react'
+
+import SignIn from './components/SignIn';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+
 
 
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 
-const initialState = { title: '', description: '' , price: 0.0}
+const initialState = { title: '', description: '', price: 0.0 }
 
 const App = () => {
   const [formState, setFormState] = useState(initialState)
   const [books, setBooks] = useState([])
 
+
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const assessLoggedInState = () => {
+    console.log("asses")
+    Auth.currentAuthenticatedUser()
+      .then(sess => {
+        console.log('logged in');
+        setLoggedIn(true);
+      })
+      .catch(() => {
+        console.log('not logged in');
+        setLoggedIn(false);
+      });
+  };
   useEffect(() => {
-    fetchBooks()
-  }, [])
+    assessLoggedInState();
+  }, []);
+
+  useEffect(() => {
+    fetchBooks();
+  }, []);
+
+  const signOut = async () => {
+    try {
+      await Auth.signOut();
+      setLoggedIn(false);
+    } catch (error) {
+      console.log('error signing out: ', error);
+    }
+  };
+
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value })
@@ -24,20 +57,22 @@ const App = () => {
 
   async function fetchBooks() {
     try {
-      const bookData = await API.graphql(graphqlOperation(listBooks))
+      const bookData = await API.graphql(
+        ( {query: listBooks, authMode: 'AWS_IAM' }))
       const books = bookData.data.listBooks.items
       setBooks(books)
-    } catch (err) { console.log('error fetching books'+ err) }
+      console.log(books)
+    } catch (err) { console.log('error fetching books' + err) }
   }
 
   async function addBook() {
     try {
       console.log(formState.price)
-      if (!formState.title || !formState.description || !formState.price ) return
+      if (!formState.title || !formState.description || !formState.price) return
       const book = { ...formState }
       setBooks([...books, book])
       setFormState(initialState)
-      await API.graphql(graphqlOperation(createBook, {input: updateBook}))
+      await API.graphql(graphqlOperation(createBook, { input: updateBook }))
     } catch (err) {
       console.log('error creating book:', err)
     }
@@ -45,61 +80,62 @@ const App = () => {
 
   return (
 
-    <Authenticator>
-      {({ signOut, user }) => (
-  
-
-
-    <div style={styles.container}>
-
-      <button onClick={signOut}>Sign out</button>
-
-      <h2>Amplify Books</h2>
-      <input
-        onChange={event => setInput('title', event.target.value)}
-        style={styles.input}
-        value={formState.title}
-        placeholder="Title"
-      />
-      <input
-        onChange={event => setInput('description', event.target.value)}
-        style={styles.input}
-        value={formState.description}
-        placeholder="Description"
-      />
-
-     <input
-        onChange={event => setInput('price', event.target.value)}
-        style={styles.input}
-        value={formState.price}
-        placeholder="Price"
-        type="number" min="0.00" max="10000.00" step="0.01"
-      />
-      <button style={styles.button} onClick={addBook}>Create Book</button>
-      {
-        books.map((book, index) => (
-          <div key={book.id ? book.id : index} style={styles.book}>
-            <p style={styles.bookName}>{book.name}</p>
-            <p style={styles.bookDescription}>{book.description}</p>
-            <p style={styles.bookPrice}>{book.price}</p>
-          </div>
-        ))
-      }
-    </div>
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          {loggedIn ? (
+            <Button onClick={signOut} variant="contained" color="primary">
+              Log Out
+            </Button>
+          ) : (
+            <Link to="/signin">
+              <Button variant="contained" color="primary">
+                Log In
+              </Button>
+            </Link>
           )}
-          </Authenticator>
+        </header>
+        <Routes>
+
+        <Route exact path="/" element={
+loggedIn ? (
+  <>
+  <TextField
+    onChange={event => setInput('title', event.target.value)}
+    value={formState.title}
+    placeholder="Title" />
+  <TextField
+    onChange={event => setInput('description', event.target.value)}
+    value={formState.description}
+    placeholder="Description" /><TextField
+    onChange={event => setInput('price', event.target.value)}
+    value={formState.price}
+    placeholder="Price"
+    type="number" min="0.00" max="10000.00" step="0.01" />
+
+  <Button onClick={addBook}>Create Book</Button>
+  </>)
+  : (<></>)}
+/* 
+  {
+    books.map((book, index) => (
+      <div key={book.id ? book.id : index}>
+        <p>{book.name}</p>
+        <p>{book.description}</p>
+        <p>{book.price}</p>
+      </div>
+    ))} */
+
+        ></Route>
+
+
+        <Route path="/signin" element={<SignIn onSignin={assessLoggedInState} />} />
+        </Routes>
+
+      </div>
+    </Router>
   )
 }
 
-const styles = {
-  container: { width: 400, margin: '0 auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 20 },
-  book: {  marginBottom: 15 },
-  input: { border: 'none', backgroundColor: '#ddd', marginBottom: 10, padding: 8, fontSize: 18 },
-  bookName: { fontSize: 20, fontWeight: 'bold' },
-  bookDescription: { marginBottom: 0 },
-  bookPrice: { marginBottom: 0 },
-
-  button: { backgroundColor: 'black', color: 'white', outline: 'none', fontSize: 18, padding: '12px 0px' }
-}
 
 export default App;
