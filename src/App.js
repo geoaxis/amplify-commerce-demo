@@ -22,7 +22,6 @@ const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const assessLoggedInState = () => {
-    console.log("asses")
     Auth.currentAuthenticatedUser()
       .then(sess => {
         console.log('logged in');
@@ -38,7 +37,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    fetchBooks();
+    fetchBooks(loggedIn);
   }, []);
 
   const signOut = async () => {
@@ -55,10 +54,14 @@ const App = () => {
     setFormState({ ...formState, [key]: value })
   }
 
-  async function fetchBooks() {
+  async function fetchBooks(loggedIn) {
     try {
+      const mode = loggedIn ? 'AMAZON_COGNITO_USER_POOLS' : 'AWS_IAM';
+      console.log("trying to fetch books with " + mode)
+
+
       const bookData = await API.graphql(
-        ( {query: listBooks, authMode: 'AWS_IAM' }))
+        ( {query: listBooks, authMode: loggedIn }))
       const books = bookData.data.listBooks.items
       setBooks(books)
       console.log(books)
