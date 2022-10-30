@@ -1,6 +1,6 @@
 import { ModelInit, MutableModel } from "@aws-amplify/datastore";
 // @ts-ignore
-import { LazyLoading, LazyLoadingDisabled } from "@aws-amplify/datastore";
+import { LazyLoading, LazyLoadingDisabled, AsyncItem } from "@aws-amplify/datastore";
 
 type BookLikesMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
@@ -13,15 +13,19 @@ type BookMetaData = {
 type EagerBookLikes = {
   readonly id: string;
   readonly userid?: string | null;
+  readonly Book?: Book | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
+  readonly bookLikesBookId?: string | null;
 }
 
 type LazyBookLikes = {
   readonly id: string;
   readonly userid?: string | null;
+  readonly Book: AsyncItem<Book | undefined>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
+  readonly bookLikesBookId?: string | null;
 }
 
 export declare type BookLikes = LazyLoading extends LazyLoadingDisabled ? EagerBookLikes : LazyBookLikes
