@@ -1,3 +1,9 @@
+type BookLikes @model @auth(rules: [{allow: groups, groups: ["admin"] , operations: [read]}, {allow: public, operations: [read], provider: iam}, {allow: owner, ownerField: "owner" }]) {
+  id: ID!
+  owner: String @auth(rules: [{allow: groups, groups: ["admin"] , operations: [read]}, {allow: public, operations: [read], provider: iam}, {allow: owner, ownerField: "owner" , operations: [read, delete]}]) 
+  Book: Book @hasOne
+}
+
 type Book @model @auth(rules: [{allow: groups, groups: ["admin"]}, {allow: private, provider: userPools}, {allow: public, operations: [read], provider: iam}]) {
   id: ID!
   title: String!

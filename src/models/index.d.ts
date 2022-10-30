@@ -12,7 +12,7 @@ type BookMetaData = {
 
 type EagerBookLikes = {
   readonly id: string;
-  readonly userid?: string | null;
+  readonly owner?: string | null;
   readonly Book?: Book | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -21,7 +21,7 @@ type EagerBookLikes = {
 
 type LazyBookLikes = {
   readonly id: string;
-  readonly userid?: string | null;
+  readonly owner?: string | null;
   readonly Book: AsyncItem<Book | undefined>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;

@@ -10,10 +10,10 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "userid": {
-                    "name": "userid",
+                "owner": {
+                    "name": "owner",
                     "isArray": false,
-                    "type": "ID",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -67,7 +67,12 @@ export const schema = {
                     "properties": {
                         "rules": [
                             {
-                                "allow": "private",
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "admin"
+                                ],
                                 "operations": [
                                     "read"
                                 ]
@@ -195,5 +200,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.1",
-    "version": "00e6d307db7caa5bb5d40b99e1ad1e77"
+    "version": "625125890de43b4515b927994cfef3dc"
 };
