@@ -3,7 +3,7 @@ import { Auth } from 'aws-amplify';
 import { useNavigate } from 'react-router-dom';
 import {  Button, TextField } from '@aws-amplify/ui-react'
 
-export default function Signin( onSignin ) {
+export default function Signin({onSignin}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -13,7 +13,8 @@ export default function Signin( onSignin ) {
         try {
             const user = await Auth.signIn(username, password);
             navigate('/');
-            //onSignin();
+            onSignin();
+            navigate(0);
         } catch (error) {
             console.log('error signing in', error);
         }

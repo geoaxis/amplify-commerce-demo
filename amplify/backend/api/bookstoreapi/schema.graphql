@@ -1,12 +1,12 @@
-type Book @model @auth (
-  rules : [
-    { allow : groups, groups: ["admin"]},
-    { allow : private, provider: userPools},
-    { allow : public, operations: [read], provider: iam}
-  ]
-){
+type BookLikes @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  userid: ID
+}
+
+type Book @model @auth(rules: [{allow: groups, groups: ["admin"]}, {allow: private, provider: userPools}, {allow: public, operations: [read], provider: iam}]) {
   id: ID!
   title: String!
   description: String
   price: Float
 }
+ 

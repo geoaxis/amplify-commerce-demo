@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { Amplify, Auth, API, graphqlOperation } from 'aws-amplify'
 import { createBook, updateBook } from './graphql/mutations'
 import { listBooks } from './graphql/queries'
-import { Button, TextField } from '@aws-amplify/ui-react'
 
 import SignIn from './components/SignIn';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Text, TextField, Flex, Button, ThemeProvider } from '@aws-amplify/ui-react';
+import "@aws-amplify/ui-react/styles.css";
+
 
 
 
 import awsExports from "./aws-exports";
+import BookList from './components/BookList'
 Amplify.configure(awsExports);
 
 const initialState = { title: '', description: '', price: 0.0 }
@@ -17,6 +20,8 @@ const initialState = { title: '', description: '', price: 0.0 }
 const App = () => {
   const [formState, setFormState] = useState(initialState)
   const [books, setBooks] = useState([])
+  const [loggedUsername, setLoggedUsername] = useState('')
+  const [loggedUserGroups, setLoggedUserGroups] = useState([])
 
 
   const [loggedIn, setLoggedIn] = useState(false);
@@ -24,11 +29,15 @@ const App = () => {
   const assessLoggedInState = () => {
     Auth.currentAuthenticatedUser()
       .then(sess => {
-        console.log('logged in');
+        console.log(sess.signInUserSession.idToken.payload['cognito:groups']);
         setLoggedIn(true);
+        setLoggedUsername(sess.attributes.email);
+        setLoggedUserGroups(sess.signInUserSession.idToken.payload['cognito:groups']);
       })
       .catch(() => {
         console.log('not logged in');
+        setLoggedUserGroups([]);
+        setLoggedUsername('');
         setLoggedIn(false);
       });
   };
@@ -37,7 +46,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    fetchBooks(loggedIn);
+    fetchBooks();
   }, []);
 
   const signOut = async () => {
@@ -54,93 +63,130 @@ const App = () => {
     setFormState({ ...formState, [key]: value })
   }
 
-  async function fetchBooks(isLoggedIn) {
+  async function fetchBooks() {
 
 
     try {
 
-      console.log("trying to fetch books with")
+      let currentAuthMode = "AWS_IAM"
+
+      await Auth.currentAuthenticatedUser()
+        .then(sess => {
+          console.log('logged in');
+          currentAuthMode = "AMAZON_COGNITO_USER_POOLS"
+        })
+        .catch(() => {
+          console.log('not logged in');
+        });
+
+
+      console.log("fetching books using authmode:" + currentAuthMode)
 
 
       const bookData = await API.graphql(
-        ( {query: listBooks,
-          authMode: isLoggedIn ? "AMAZON_COGNITO_USER_POOLS" : "AWS_IAM",
+        ({
+          query: listBooks,
+          authMode: currentAuthMode,
         }))
       const books = bookData.data.listBooks.items
       setBooks(books)
-      console.log(books)
     } catch (err) { console.log('error fetching books' + err) }
   }
 
   async function addBook() {
     try {
-      console.log(formState.price)
       if (!formState.title || !formState.description || !formState.price) return
       const book = { ...formState }
+      console.log(book)
+
       setBooks([...books, book])
       setFormState(initialState)
-      await API.graphql(graphqlOperation(createBook, { input: updateBook }))
+      await API.graphql(graphqlOperation(createBook, { input: book }))
     } catch (err) {
       console.log('error creating book:', err)
     }
   }
 
   return (
+    <ThemeProvider>
 
-    <Router>
-      <div className="App">
-        <header className="App-header">
-          {loggedIn ? (
-            <Button onClick={signOut} variant="contained" color="primary">
-              Log Out
-            </Button>
-          ) : (
-            <Link to="/signin">
-              <Button variant="contained" color="primary">
-                Log In
-              </Button>
-            </Link>
-          )}
-        </header>
-        <Routes>
-
-        <Route exact path="/" element={
-loggedIn ? (
-  <>
-  <TextField
-    onChange={event => setInput('title', event.target.value)}
-    value={formState.title}
-    placeholder="Title" />
-  <TextField
-    onChange={event => setInput('description', event.target.value)}
-    value={formState.description}
-    placeholder="Description" /><TextField
-    onChange={event => setInput('price', event.target.value)}
-    value={formState.price}
-    placeholder="Price"
-    type="number" min="0.00" max="10000.00" step="0.01" />
-
-  <Button onClick={addBook}>Create Book</Button>
-  </>)
-  : (<></>)}
-/* 
-  {
-    books.map((book, index) => (
-      <div key={book.id ? book.id : index}>
-        <p>{book.name}</p>
-        <p>{book.description}</p>
-        <p>{book.price}</p>
-      </div>
-    ))} */
-
-        ></Route>
+      <Router forceRefresh={true}>
+        <div className="App">
+          <header className="App-header">
+            {loggedIn ? (
 
 
-        <Route path="/signin" element={<SignIn onSignin={assessLoggedInState} />} />
-        </Routes>
+              <>
+                <Flex
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="stretch"
+                  alignContent="flex-start"
+                  wrap="nowrap"
+                  gap="1rem"
+                >
 
-      </div>
-    </Router>
+
+                  <Text>
+                    {loggedUsername} {loggedUserGroups}
+                  </Text>
+                  <Button onClick={signOut} variant="contained" color="primary">
+                    Log Out
+                  </Button>
+
+
+
+
+                </Flex>
+
+              </>
+            ) : (
+              <Link to="/signin">
+                <Button variant="contained" color="primary">
+                  Log In
+                </Button>
+              </Link>
+            )}
+          </header>
+          <Routes>
+
+            <Route exact path="/" element={
+              loggedIn ? (
+
+                <>
+
+                  <TextField
+                    onChange={event => setInput('title', event.target.value)}
+                    value={formState.title}
+                    placeholder="Title"
+                  />
+                  <TextField
+                    onChange={event => setInput('description', event.target.value)}
+                    value={formState.description}
+                    placeholder="Description"
+                  />
+
+                  <TextField
+                    onChange={event => setInput('price', event.target.value)}
+                    value={formState.price}
+                    placeholder="Price"
+                    type="number" min="0.00" max="10000.00" step="0.01"
+                  />
+                  <Button onClick={addBook}>Create Book</Button>
+
+                  <BookList books={books} />
+                </>)
+                : (<BookList books={books} />)}
+
+            ></Route>
+
+
+            <Route path="/signin" element={<SignIn onSignin={assessLoggedInState} />} />
+          </Routes>
+
+        </div>
+      </Router>
+    </ThemeProvider>
   )
 }
 
