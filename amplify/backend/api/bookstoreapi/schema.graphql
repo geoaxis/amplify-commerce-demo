@@ -1,10 +1,3 @@
-type BookLikes @model @auth(rules: [{allow: private, operations: [read]}, {allow: public, operations: [read], provider: iam}, {allow: owner, ownerField: "author" }]) {
-  id: ID!
-  userid: ID
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
-  Book: Book @hasOne
-}
-
 type Book @model @auth(rules: [{allow: groups, groups: ["admin"]}, {allow: private, provider: userPools}, {allow: public, operations: [read], provider: iam}]) {
   id: ID!
   title: String!
