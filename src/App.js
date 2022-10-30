@@ -54,14 +54,18 @@ const App = () => {
     setFormState({ ...formState, [key]: value })
   }
 
-  async function fetchBooks(loggedIn) {
+  async function fetchBooks(isLoggedIn) {
+
+
     try {
-      const mode = loggedIn ? 'AMAZON_COGNITO_USER_POOLS' : 'AWS_IAM';
-      console.log("trying to fetch books with " + mode)
+
+      console.log("trying to fetch books with")
 
 
       const bookData = await API.graphql(
-        ( {query: listBooks, authMode: loggedIn }))
+        ( {query: listBooks,
+          authMode: isLoggedIn ? "AMAZON_COGNITO_USER_POOLS" : "AWS_IAM",
+        }))
       const books = bookData.data.listBooks.items
       setBooks(books)
       console.log(books)
