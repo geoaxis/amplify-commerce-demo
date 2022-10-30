@@ -1,5 +1,7 @@
-import { Text, Collection, Card, View , Heading } from '@aws-amplify/ui-react'
-
+import { ToggleButton, Text, Collection, Card, View , Heading } from '@aws-amplify/ui-react'
+import {
+    MdFavorite
+  } from 'react-icons/md';
 
 export default function BookList({books}) {
     return(
@@ -18,11 +20,15 @@ export default function BookList({books}) {
       variation="outlined"
     >
       <View padding="xs">
-        <Heading padding="medium">{book.title}</Heading>
+        <Heading padding="xs">{book.title}</Heading>
         <Text as="span">
               {book.description}
             </Text>
+
       </View>
+      <ToggleButton value="bold">
+        <MdFavorite />
+      </ToggleButton>
     </Card>
   )}
 </Collection>)
