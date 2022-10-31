@@ -4,7 +4,7 @@ type BookLikes @model @auth(rules: [{allow: groups, groups: ["admin"] , operatio
   Book: Book @hasOne
 }
 
-type Book @model @auth(rules: [{allow: groups, groups: ["admin"]}, {allow: private, provider: userPools}, {allow: public, operations: [read], provider: iam}]) {
+type Book @model @auth(rules: [{allow: groups, groups: ["admin"]}, {allow: private, provider: userPools, operations: [read]}, {allow: public, operations: [read], provider: iam}]) {
   id: ID!
   title: String!
   description: String
