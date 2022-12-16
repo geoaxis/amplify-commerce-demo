@@ -1,6 +1,10 @@
 import { AmazonCognitoIdentity } from 'amazon-cognito-identity-js';
 
+const aws = require('aws-sdk');
+
+
 const awsServerlessExpress = require('aws-serverless-express');
+
 const app = require('./app');
 
 exports.handler = async () => {
