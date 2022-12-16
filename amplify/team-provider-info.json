@@ -26,7 +26,9 @@
         }
       },
       "function": {
-        "unauth": {}
+        "unauth": {
+          "secretsPathAmplifyAppId": "d3qh2dtuqr8i8i"
+        }
       }
     }
   }

@@ -6,5 +6,9 @@
       ]
     }
   },
-  "lambdaLayers": []
+  "lambdaLayers": [],
+  "secretNames": [
+    "USERNAME",
+    "PASSWORD"
+  ]
 }
