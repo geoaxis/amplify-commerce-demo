@@ -1,4 +1,4 @@
-import { , AmazonCognitoIdentity } from 'amazon-cognito-identity-js';
+import { AmazonCognitoIdentity } from 'amazon-cognito-identity-js';
 
 const awsServerlessExpress = require('aws-serverless-express');
 const app = require('./app');
