@@ -1,11 +1,4 @@
 const AWS = require('aws-sdk')
-
-var AmazonCognitoIdentity = require('amazon-cognito-identity-js');
-var CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool;
-var AuthenticationDetails = AmazonCognitoIdentity.AuthenticationDetails;
-var CognitoUser = AmazonCognitoIdentity.CognitoUser;
-
-
 const awsServerlessExpress = require('aws-serverless-express');
 
 const app = require('./app');
@@ -53,29 +46,7 @@ exports.handler = (event, context) => {
     Username : process.env.USERNAME,
     Password : process.env.PASSWORD,
 };
-var authenticationDetails = new AuthenticationDetails(authenticationData);
-var poolData = { UserPoolId : process.env.AUTH_AMPLIFYCOMMERCEDEMOAC357CB1AC357CB1_USERPOOLID,
-    ClientId : '1example23456789'
-};
-var userPool = new CognitoUserPool(poolData);
-var userData = {
-    Username : process.env.USERNAME,
-    Pool : userPool
-};
-var cognitoUser =  new CognitoUser(userData);
-cognitoUser.authenticateUser(authenticationDetails, {
-    onSuccess: function (result) {
-        var accessToken = result.getAccessToken().getJwtToken();
 
-        /* Use the idToken for Logins Map when Federating User Pools with identity pools or when passing through an Authorization Header to an API Gateway Authorizer */
-        var idToken = result.idToken.jwtToken;
-    },
 
-    onFailure: function(err) {
-        alert(err);
-    },
-
-});
-
-  return cognitoUser;
+  return {"result": "ok"};
 };
