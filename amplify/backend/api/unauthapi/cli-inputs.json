@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/unauth": {
+      "name": "/unauth",
+      "lambdaFunction": "unauth",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
