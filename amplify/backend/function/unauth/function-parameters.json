@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "auth": {
+      "amplifycommercedemoac357cb1ac357cb1": [
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
