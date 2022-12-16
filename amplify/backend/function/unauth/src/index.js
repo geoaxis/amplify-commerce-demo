@@ -15,7 +15,6 @@ exports.handler = (event, context) => {
 
   
   console.log(process.env.AUTH_AMPLIFYCOMMERCEDEMOAC357CB1AC357CB1_USERPOOLID);
-  console.log(AUTH_AMPLIFYCOMMERCEDEMOAC357CB1AC357CB1_USERPOOLID);
 
   return awsServerlessExpress.proxy(server, event, context, 'PROMISE').promise;
 };
