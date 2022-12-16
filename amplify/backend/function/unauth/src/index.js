@@ -1,4 +1,4 @@
-import { AmazonCognitoIdentity } from 'amazon-cognito-identity-js';
+const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 
 const aws = require('aws-sdk');
 
