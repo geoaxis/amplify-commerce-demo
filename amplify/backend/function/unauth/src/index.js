@@ -47,6 +47,14 @@ exports.handler = (event, context) => {
     Password : process.env.PASSWORD,
 };
 
+let response = {
+  statusCode: 200,
+  headers: {
+      "x-custom-header" : "my custom header value"
+  },
+  body: JSON.stringify({"result": "ok"})
+};
+console.log("response: " + JSON.stringify(response))
+return response;
 
-  return {"result": "ok"};
 };
