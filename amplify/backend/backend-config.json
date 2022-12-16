@@ -73,20 +73,6 @@
           ]
         }
       }
-    },
-    "unauthapi": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "unauth",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
     }
   },
   "hosting": {
@@ -101,32 +87,5 @@
       "providerPlugin": "awscloudformation"
     }
   },
-  "function": {
-    "unauth": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "logins",
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
-        },
-        {
-          "category": "auth",
-          "resourceName": "amplifycommercedemoac357cb1ac357cb1",
-          "attributes": [
-            "UserPoolId"
-          ]
-        }
-      ]
-    }
-  }
+  "function": {}
 }
