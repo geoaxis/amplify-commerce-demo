@@ -122,13 +122,9 @@ exports.handler = async (event, context) => {
         const response = {
             "statusCode": 200,
             "headers": {
-                "Cache-Control": "no-cache, no-store, must-revalidate",
-                "Pragma": "no-cache",
-                "Expires": 0,
                 "Access-Control-Allow-Headers" : "Content-Type",
-                "Access-Control-Allow-Origin": "https://commerce.mytestapp.be",
+                "Access-Control-Allow-Origin": "https://www.example.com",
                 "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
-                }
             },
             "body": tokenResponse,
             "isBase64Encoded": false
