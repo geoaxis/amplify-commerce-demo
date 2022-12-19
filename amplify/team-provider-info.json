@@ -24,6 +24,12 @@
           "appId": "d3qh2dtuqr8i8i",
           "type": "cicd"
         }
+      },
+      "function": {
+        "commercetoken": {
+          "parametersSecretsExtensionHttpPort": "2773",
+          "secretsPathAmplifyAppId": "d3qh2dtuqr8i8i"
+        }
       }
     }
   }

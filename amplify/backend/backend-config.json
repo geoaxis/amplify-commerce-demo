@@ -87,5 +87,12 @@
       "providerPlugin": "awscloudformation"
     }
   },
-  "function": {}
+  "function": {
+    "commercetoken": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    }
+  }
 }
