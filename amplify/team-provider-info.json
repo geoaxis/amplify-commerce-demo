@@ -28,7 +28,8 @@
       "function": {
         "commercetoken": {
           "secretsPathAmplifyAppId": "d3qh2dtuqr8i8i",
-          "parametersSecretsExtensionHttpPort": "2773"
+          "parametersSecretsExtensionHttpPort": "2773",
+          "nodeDebug": "http"
         }
       }
     }
