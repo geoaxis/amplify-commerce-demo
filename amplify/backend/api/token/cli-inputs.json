@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "paths": {
+    "/token": {
+      "name": "/token",
+      "lambdaFunction": "commercetoken",
+      "permissions": {
+        "setting": "protected",
+        "auth": [
+          "read"
+        ],
+        "guest": [
+          "read"
+        ]
+      }
+    }
+  }
+}

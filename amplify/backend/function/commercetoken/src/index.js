@@ -31,9 +31,9 @@ Amplify Params - DO NOT EDIT */
  * 
  */
 
-import * as http from 'http';
-import * as https from 'https';
-import * as qs from 'querystring';
+const http = require('http');
+const https = require('https');
+const qs  = require('querystring');
 
 
 async function post(url, data, authToken) {
