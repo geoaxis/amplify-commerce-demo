@@ -27,8 +27,8 @@
       },
       "function": {
         "commercetoken": {
-          "parametersSecretsExtensionHttpPort": "2773",
-          "secretsPathAmplifyAppId": "d3qh2dtuqr8i8i"
+          "secretsPathAmplifyAppId": "d3qh2dtuqr8i8i",
+          "parametersSecretsExtensionHttpPort": "2773"
         }
       }
     }

@@ -16,10 +16,10 @@
     "s3Key": {
       "Type": "String"
     },
-    "parametersSecretsExtensionHttpPort": {
+    "secretsPathAmplifyAppId": {
       "Type": "String"
     },
-    "secretsPathAmplifyAppId": {
+    "parametersSecretsExtensionHttpPort": {
       "Type": "String"
     }
   },
@@ -76,9 +76,6 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "PARAMETERS_SECRETS_EXTENSION_HTTP_PORT": {
-              "Ref": "parametersSecretsExtensionHttpPort"
-            },
             "TOKEN_BASIC_AUTH": {
               "Fn::Join": [
                 "",
@@ -100,6 +97,9 @@
                   "TOKEN_BASIC_AUTH"
                 ]
               ]
+            },
+            "PARAMETERS_SECRETS_EXTENSION_HTTP_PORT": {
+              "Ref": "parametersSecretsExtensionHttpPort"
             }
           }
         },
