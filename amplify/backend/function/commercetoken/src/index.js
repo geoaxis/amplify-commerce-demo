@@ -76,7 +76,7 @@ async function post(url, data, authToken) {
 }
 
 
-export const lambdaHandler = async (event, context) => {
+exports.handler = async (event, context) => {
     try {
         let headerToken = process.env.AWS_SESSION_TOKEN;
         let ssmPort = process.env.PARAMETERS_SECRETS_EXTENSION_HTTP_PORT;
