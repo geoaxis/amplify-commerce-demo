@@ -178,9 +178,6 @@ export const schema = {
                                 "allow": "private",
                                 "provider": "userPools",
                                 "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
                                     "read"
                                 ]
                             },
@@ -199,6 +196,6 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "codegenVersion": "3.3.1",
+    "codegenVersion": "3.3.2",
     "version": "625125890de43b4515b927994cfef3dc"
 };

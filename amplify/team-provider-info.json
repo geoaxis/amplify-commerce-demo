@@ -9,7 +9,8 @@
       "UnauthRoleName": "amplify-amplifycommercedemo-dev-233723-unauthRole",
       "StackName": "amplify-amplifycommercedemo-dev-233723",
       "StackId": "arn:aws:cloudformation:eu-west-1:518912499641:stack/amplify-amplifycommercedemo-dev-233723/e105d2b0-57d1-11ed-bd63-0245140fd703",
-      "AmplifyAppId": "d3qh2dtuqr8i8i"
+      "AmplifyAppId": "d3qh2dtuqr8i8i",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-amplifycommercedemo-dev-233723-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
@@ -17,7 +18,8 @@
         "userPoolGroups": {}
       },
       "api": {
-        "bookstoreapi": {}
+        "bookstoreapi": {},
+        "token": {}
       },
       "hosting": {
         "amplifyhosting": {
@@ -29,8 +31,13 @@
         "commercetoken": {
           "secretsPathAmplifyAppId": "d3qh2dtuqr8i8i",
           "parametersSecretsExtensionHttpPort": "2773",
-          "nodeDebug": "http"
+          "nodeDebug": "http",
+          "deploymentBucketName": "amplify-amplifycommercedemo-dev-233723-deployment",
+          "s3Key": "amplify-builds/commercetoken-426a426b79664c644c67-build.zip"
         }
+      },
+      "storage": {
+        "logins": {}
       }
     }
   }
