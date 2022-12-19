@@ -21,6 +21,9 @@
     },
     "parametersSecretsExtensionHttpPort": {
       "Type": "String"
+    },
+    "nodeDebug": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -100,6 +103,9 @@
             },
             "PARAMETERS_SECRETS_EXTENSION_HTTP_PORT": {
               "Ref": "parametersSecretsExtensionHttpPort"
+            },
+            "NODE_DEBUG": {
+              "Ref": "nodeDebug"
             }
           }
         },

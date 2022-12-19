@@ -10,6 +10,10 @@
     {
       "cloudFormationParameterName": "parametersSecretsExtensionHttpPort",
       "environmentVariableName": "PARAMETERS_SECRETS_EXTENSION_HTTP_PORT"
+    },
+    {
+      "cloudFormationParameterName": "nodeDebug",
+      "environmentVariableName": "NODE_DEBUG"
     }
   ],
   "secretNames": [
