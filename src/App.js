@@ -9,9 +9,6 @@ import { Text, TextField, Flex, Button, ThemeProvider } from '@aws-amplify/ui-re
 
 import "@aws-amplify/ui-react/styles.css";
 
-
-
-
 import awsExports from "./aws-exports";
 import BookList from './components/BookList'
 Amplify.configure(awsExports);
@@ -22,6 +19,11 @@ const initialState = { title: '', description: '', price: 0.0 }
 const App = () => {
   const [formState, setFormState] = useState(initialState)
   const [books, setBooks] = useState([])
+  const [jwt, setJwt] = useState('')
+  const [globalJwt, setGlobalJwt] = useState('')
+
+
+
   const [loggedUsername, setLoggedUsername] = useState('')
   const [loggedUserGroups, setLoggedUserGroups] = useState([])
 
@@ -29,18 +31,22 @@ const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const assessLoggedInState = () => {
+    setGlobalJwt('')
+    setJwt('')
     Auth.currentAuthenticatedUser()
       .then(sess => {
         console.log(sess.signInUserSession.idToken.payload['cognito:groups']);
         setLoggedIn(true);
         setLoggedUsername(sess.attributes.email);
         setLoggedUserGroups(sess.signInUserSession.idToken.payload['cognito:groups']);
+        setGlobalJwt(sess.signInUserSession.accessToken.jwtToken);
       })
       .catch(() => {
         console.log('not logged in');
         setLoggedUserGroups([]);
         setLoggedUsername('');
         setLoggedIn(false);
+        
       });
   };
   useEffect(() => {
@@ -74,7 +80,6 @@ const App = () => {
 
       await Auth.currentAuthenticatedUser()
         .then(sess => {
-          console.log('logged in');
           currentAuthMode = "AMAZON_COGNITO_USER_POOLS"
         })
         .catch(() => {
@@ -84,9 +89,10 @@ const App = () => {
 
         console.log("fetching books using authmode:" + currentAuthMode)
 
-        const token = API.get("token", "/token");
+        const token = await API.get("token", "/token");
 
-        console.log(token);
+        setJwt(token.access_token);
+
 
 
       const bookData = await API.graphql(
@@ -119,8 +125,22 @@ const App = () => {
       <Router forceRefresh={true}>
         <div className="App">
           <header className="App-header">
-            {loggedIn ? (
+            
+            <span style={{ fontSize: 10}}>
+              <p  style={{ fontWeight: "bold"}}>
+              Lambda Tokn  (client credentials proxied through a lamnda but accessed through cognito unauthenticated token)
+              </p>
+              <p>{jwt}</p>
 
+            </span>
+       
+            <span style={{ fontSize: 10}}>
+            <p style={{ fontWeight: "bold", width: "100%"}}>
+              Cognito Token (access token directly from cognito user pool authentication)
+            </p>
+            <p>{globalJwt}</p>
+            </span>
+            {loggedIn ? (
 
               <>
                 <Flex
@@ -132,16 +152,12 @@ const App = () => {
                   gap="1rem"
                 >
 
-
                   <Text>
                     {loggedUsername} {loggedUserGroups}
                   </Text>
                   <Button onClick={signOut} variant="contained" color="primary">
                     Log Out
                   </Button>
-
-
-
 
                 </Flex>
 
