@@ -114,7 +114,7 @@ exports.handler = async (event, context) => {
 
         var postData = qs.stringify({
             'grant_type': 'client_credentials',
-            'scope': 'transactions/post'
+            'scope': 'bookstore/view'
         });
 
         const tokenResponse = await post('https://commerecedemotoken.auth.eu-west-1.amazoncognito.com/oauth2/token', postData, authToken);
