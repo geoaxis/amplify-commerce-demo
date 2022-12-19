@@ -117,7 +117,7 @@ exports.handler = async (event, context) => {
             'scope': 'transactions/post'
         });
 
-        const tokenResponse = await post('https://commercedemotoken.auth.eu-west-1.amazoncognito.com/oauth2/token', postData, authToken);
+        const tokenResponse = await post('https://commerecedemotoken.auth.eu-west-1.amazoncognito.com/oauth2/token', postData, authToken);
 
         const response = {
             "statusCode": 200,
