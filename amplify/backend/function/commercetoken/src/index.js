@@ -124,7 +124,11 @@ exports.handler = async (event, context) => {
             "headers": {
                 "Cache-Control": "no-cache, no-store, must-revalidate",
                 "Pragma": "no-cache",
-                "Expires": 0
+                "Expires": 0,
+                "Access-Control-Allow-Headers" : "Content-Type",
+                "Access-Control-Allow-Origin": "https://commerce.mytestapp.be",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+                }
             },
             "body": tokenResponse,
             "isBase64Encoded": false
